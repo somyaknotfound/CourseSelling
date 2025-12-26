@@ -3,6 +3,7 @@ const express = require("express")
 
 const app = express()
 
+//adding routes
 
 app.post("/user/signup" , function(req,res) {
     res.json({
@@ -10,6 +11,7 @@ app.post("/user/signup" , function(req,res) {
     })
 })
 
+print("hello");
 
 app.post("/user/signin" , function(req,res) {
     res.json({
