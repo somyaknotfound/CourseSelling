@@ -11,7 +11,7 @@ app.post("/user/signup" , function(req,res) {
     })
 })
 
-print("hello");
+
 
 app.post("/user/signin" , function(req,res) {
     res.json({
@@ -21,6 +21,11 @@ app.post("/user/signin" , function(req,res) {
 
 
 app.post("/user/purchases" , function(req,res) {
+    res.json({
+        message:"signup Endpoint"
+    })
+})  
+app.post("/course/purchase" , function(req,res) {
     res.json({
         message:"signup Endpoint"
     })
