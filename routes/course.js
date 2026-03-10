@@ -16,6 +16,12 @@ courseRouter.get("/courses", function(req, res) {
     });
 });
 
+courseRouter.get("/preview" , function(req,res) {
+    res.json({
+        message: "Previewing course"
+    })
+})
+
 
 module.exports = {
     courseRouter: courseRouter

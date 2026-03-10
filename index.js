@@ -1,6 +1,7 @@
 const express = require("express");
 const { courseRouter } = require("./routes/course");
 const { userRouter } = require("./routes/user");
+const { adminRouter } = require("./routes/admin");
 
 const app = express();
 
@@ -9,7 +10,7 @@ app.use("/user", userRouter);
 // gets handeled by userRouter
 
 app.use("/course", courseRouter );
-
+app.use("/admin" ,adminRouter);
 app.listen(3000, () => {
 	console.log("Server running on http://localhost:3000");
 });
