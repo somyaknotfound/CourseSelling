@@ -1,34 +1,16 @@
+const express = require("express");
+const { courseRouter } = require("./routes/course");
+const { userRouter } = require("./routes/user");
+const { adminRouter } = require("./routes/admin");
 
-const express = require("express")
+const app = express();
 
-const app = express()
+app.use(express.json());
+app.use("/user", userRouter);
+// gets handeled by userRouter
 
-
-app.post("/user/signup" , function(req,res) {
-    res.json({
-        message:"signup Endpoint"
-    })
-})
-
-
-app.post("/user/signin" , function(req,res) {
-    res.json({
-        message:"signup Endpoint"
-    })
-})
-
-
-app.post("/user/purchases" , function(req,res) {
-    res.json({
-        message:"signup Endpoint"
-    })
-})  
-
-
-app.get("/courses" , function(req,res) {
-    res.json({
-        message:"signup Endpoint"
-    })
-})  
-
-app.listen(3000)
+app.use("/course", courseRouter );
+app.use("/admin" ,adminRouter);
+app.listen(3000, () => {
+	console.log("Server running on http://localhost:3000");
+});
