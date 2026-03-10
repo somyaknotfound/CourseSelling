@@ -1,18 +1,15 @@
+const express = require("express");
+const { courseRouter } = require("./routes/course");
+const { userRouter } = require("./routes/user");
 
-const express = require("express")
-const CreateCourseRoutes = require("./routes/course")
-const CreateUserRoutes = require("./routes/user")
-const app = express()
+const app = express();
 
+app.use(express.json());
+app.use("/user", userRouter);
+// gets handeled by userRouter
 
+app.use("/course", courseRouter );
 
-app.use("/user",userRouter);
-app.use("/course",courseRouter);
-
-
-
-CreateUserRoutes(app);
-CreateUserRoutes(app);
-
-
-app.listen(3000)
+app.listen(3000, () => {
+	console.log("Server running on http://localhost:3000");
+});
