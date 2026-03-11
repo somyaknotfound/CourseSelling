@@ -5,7 +5,7 @@ const { courseRouter } = require("./routes/course");
 const { userRouter } = require("./routes/user");
 const { adminRouter } = require("./routes/admin");
 const { connectDB } = require("./db");
-
+// express routes and middlewares
 const app = express();
 const PORT = process.env.PORT || 3000;
 const MONGO_URI = process.env.MONGO_URI;
@@ -16,7 +16,7 @@ app.use("/user", userRouter);
 
 app.use("/course", courseRouter );
 app.use("/admin" ,adminRouter);
-
+// db connection
 async function startServer() {
 	try {
 		await connectDB(MONGO_URI);
