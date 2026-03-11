@@ -5,17 +5,22 @@ const { courseRouter } = require("./routes/course");
 const { userRouter } = require("./routes/user");
 const { adminRouter } = require("./routes/admin");
 const { connectDB } = require("./db");
+const cookieParser = require("cookie-parser");
+
 // express routes and middlewares
 const app = express();
 const PORT = process.env.PORT || 3000;
 const MONGO_URI = process.env.MONGO_URI;
-
+// express middle ware needed to get body requests from the post request being sent by client
 app.use(express.json());
-app.use("/user", userRouter);
+app.use(cookieParser());
+
+
+app.use("/api/v1/user", userRouter);
 // gets handeled by userRouter
 
-app.use("/course", courseRouter );
-app.use("/admin" ,adminRouter);
+app.use("/api/v1/course", courseRouter );
+app.use("/api/v1/admin" ,adminRouter);
 // db connection
 async function startServer() {
 	try {
