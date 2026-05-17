@@ -1,48 +1,59 @@
 const express = require("express");
 const { userMiddleware } = require("../middlewares/user");
-const { purchaseModel } = require("../db");
+const { purchaseModel, courseModel } = require("../db");
 
 const courseRouter = express.Router();
 
-courseRouter.post("/purchase",userMiddleware, async function(req, res) {
 
+// POST /purchase — Purchase a course (authenticated users only)
+courseRouter.post("/purchase", userMiddleware, async function (req, res) {
+    try {
+        const userId = req.userId;
+        const { courseId } = req.body;
 
-    // you would expect to pay money
+        if (!courseId) {
+            return res.status(400).json({ message: "courseId is required" });
+        }
 
-    const userId = req.userId;
-    const courseId = req.body.courseId
+        // Check that the course exists
+        const course = await courseModel.findById(courseId);
+        if (!course) {
+            return res.status(404).json({ message: "Course not found" });
+        }
 
-    await purchaseModel.create({
-        userId,
-        courseId
-    })
+        // Prevent duplicate purchases
+        const alreadyPurchased = await purchaseModel.findOne({ userId, courseId });
+        if (alreadyPurchased) {
+            return res.status(409).json({ message: "Course already purchased" });
+        }
 
+        await purchaseModel.create({ userId, courseId });
 
-    res.json({
-        message: "You have successfully bought the course"
-    });
+        res.status(201).json({ message: "Course purchased successfully" });
+    } catch (error) {
+        res.status(500).json({
+            message: "Error processing purchase",
+            error: error.message,
+        });
+    }
 });
 
 
-courseRouter.get("/courses", function(req, res) {
-    res.json({
-        message: "courses list Endpoint"
-    });
+// GET /preview — List all available courses (public)
+courseRouter.get("/preview", async function (req, res) {
+    try {
+        const courses = await courseModel.find({});
+
+        res.json({ courses });
+    } catch (error) {
+        res.status(500).json({
+            message: "Error fetching courses",
+            error: error.message,
+        });
+    }
 });
-
-courseRouter.get("/preview" ,  async function(req,res) {
-
-
-    const courses = await courseModel.find({});
-
-
-
-    res.json({
-        courses
-    })
-})
 
 
 module.exports = {
-    courseRouter: courseRouter
+    courseRouter,
 };
