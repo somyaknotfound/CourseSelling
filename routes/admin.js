@@ -147,6 +147,8 @@ adminRouter.put("/course", adminMiddleware, async function(req, res) {
         message: "Course updated successfully"
     });
 
+    console.log(req.body);
+
 });
 
 adminRouter.get(
