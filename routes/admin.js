@@ -95,17 +95,86 @@ adminRouter.post("/course", adminMiddleware , async function(req, res) {
 });
 
 
-adminRouter.put("/course", function(req, res) {
+
+/* 
+
+PUT /course
+↓
+middleware verifies admin
+↓
+extract courseId + updates
+↓
+find course
+↓
+if course not found → 404
+↓
+if creatorId != req.adminId → 403
+↓
+update fields
+↓
+save
+↓
+success response
+
+*/
+
+adminRouter.put("/course", adminMiddleware, async function(req, res) {
+
+    const authenticatedAdminId = req.adminId;
+
+    const { title, description, imageUrl, price, courseId } = req.body;
+
+    const result = await courseModel.updateOne(
+        {
+            _id: courseId,
+            creatorId: authenticatedAdminId
+        },
+        {
+            title,
+            description,
+            imageUrl,
+            price
+        }
+    );
+
+    if (result.matchedCount === 0) {
+        return res.status(403).json({
+            message: "Not authorized or course not found"
+        });
+    }
+
     res.json({
-        message: "Change course content"
+        message: "Course updated successfully"
     });
+
 });
 
-adminRouter.get("/course/bulk", function(req, res) {
-    res.json({
-        message: "see course content"
-    });
-});
+adminRouter.get(
+    "/course/bulk",
+    adminMiddleware,
+    async function(req, res) {
+
+        const authenticatedAdminId = req.adminId;
+
+
+        const courses = await courseModel.find({
+            creatorId: authenticatedAdminId
+        });
+
+
+        if (courses.length === 0) {
+            return res.status(404).json({
+                message: "No courses found"
+            });
+        }
+
+
+        res.json({
+            courses: courses
+        });
+
+    }
+);
 
 
 
