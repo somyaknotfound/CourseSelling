@@ -2,7 +2,7 @@ const express = require("express");
 const bcrypt = require("bcrypt");
 const userRouter = express.Router();
 const {userModel} = require("../db");
-const JWT_USER_PASSWORD = "adlaldadlad"
+const {JWT_USER_PASSWORD} = require("../config");
 
 const jwt = require("jsonwebtoken");
 
