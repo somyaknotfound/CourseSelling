@@ -1,10 +1,11 @@
 const express = require("express");
 const bcrypt = require("bcrypt");
 const userRouter = express.Router();
-const {userModel} = require("../db");
+const {userModel , purchaseModel} = require("../db");
 const {JWT_USER_PASSWORD} = require("../config");
 
 const jwt = require("jsonwebtoken");
+const { userMiddleware } = require("../middlewares/user");
 
 
 userRouter.post("/signup",  async function(req, res) {
@@ -92,9 +93,20 @@ userRouter.post("/signin",  async function(req, res) {
 });
 
 
-userRouter.post("/purchases", function(req, res) {
+userRouter.post("/purchases",userMiddleware, async function(req, res) {
+    const userId = req.userId;
+
+
+    const purchases = await purchaseModel.find({
+            userId,
+            
+        })
+
+
+
+
     res.json({
-        message: "purchases Endpoint"
+        purchases
     });
 });
 
